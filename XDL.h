@@ -513,7 +513,7 @@ XDLModule XDL_init() {
     #endif
 
     /* send the module to the user */
-    #ifndef __cplusplus || defined(XDL_NO_DEALLOCATE) 
+    #if !defined(__cplusplus) || defined(XDL_NO_DEALLOCATE) 
     return module;
     #else
     return {module};
@@ -521,7 +521,7 @@ XDLModule XDL_init() {
 }
 
 void XDL_close(XDLModule m) {
-    #ifdef __cplusplus && !defined(XDL_NO_DEALLOCATE) 
+    #if defined(__cplusplus) && !defined(XDL_NO_DEALLOCATE) 
     void** module = m.module;
     #else
     void** module = m;
@@ -539,7 +539,7 @@ void XDL_close(XDLModule m) {
     
     module =  NULL;
 }
-#ifdef __cplusplus && !defined(XDL_NO_DEALLOCATE)
+#if defined(__cplusplus) && !defined(XDL_NO_DEALLOCATE)
 XDLModule::~XDLModule() {
     XDL_close(*this);
 }
