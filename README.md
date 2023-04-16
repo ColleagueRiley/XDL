@@ -1,4 +1,6 @@
 # XLib Dynamic Loader
+![alt text](https://github.com/ColleagueRiley/XDL/blob/main/logo.png?raw=true)
+
 A single header file that dynamically loads the Xlib and GLX library
 
 # Use
