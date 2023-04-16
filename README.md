@@ -1,5 +1,5 @@
 # XLib Dynamic Loader
-A single header file that dymaically loads the Xlib and GLX library
+A single header file that dynamically loads the Xlib and GLX library
 
 # Use
 First, define XDL_IMPLEMENTATION and include the library 
