@@ -30,3 +30,19 @@ You can also define XDL_NO_GLX before including XDL if you don't want to include
 #include "XDL.h"
 ```
 
+XDL_NO_DEALLOCATE can be defined to turn of automatic deallocation for c++
+
+```cpp
+#define XDL_NO_DEALLOCATE
+#define XDL_IMPLEMENTATION
+#include "XDL.h"
+```
+
+# Credits
+* [GLFW](https://github.com/GLFW/GLFW) Much of this implementation is based on GLFW's internal x11 dynamic loader
+        A great portion of the declarations for the X11 module are sourced from GLFW
+
+* [stb](https://github.com/nothings/stb/) This project is heavily inspired by the stb single header files
+
+# License
+This project is public domain but credit  would be greatly appreciated. 
