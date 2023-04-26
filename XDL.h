@@ -169,6 +169,7 @@ typedef GLXContext (*PFN_glXCreateContext)(Display*, XVisualInfo*, GLXContext, B
 typedef Bool (*PFN_glXMakeCurrent)(Display*, GLXDrawable, GLXContext);
 typedef void (*PFN_glXSwapBuffers)(Display*, GLXDrawable);
 typedef PFNGLXSWAPINTERVALEXTPROC PFN_glXSwapIntervalEXT;
+typedef void* (*PFN_glXGetProcAddress)(const GLubyte *procname);
 #endif
 
 /* Src vars for reciving the functions */
@@ -275,6 +276,7 @@ PFN_glXCreateContext glXCreateContextSrc;
 PFN_glXMakeCurrent glXMakeCurrentSrc;
 PFN_glXSwapBuffers glXSwapBuffersSrc;
 PFN_glXSwapIntervalEXT glXSwapIntervalEXTSrc; 
+PFN_glXGetProcAddress glXGetProcAddressSrc;
 #endif
 
 /* Function to source defines */
@@ -380,6 +382,7 @@ PFN_glXSwapIntervalEXT glXSwapIntervalEXTSrc;
 #define glXCreateContext glXCreateContextSrc
 #define glXMakeCurrent glXMakeCurrentSrc
 #define glXSwapBuffers glXSwapBuffersSrc
+#define glXGetProcAddress glXGetProcAddressSrc
 #endif
 
 #ifdef XDL_IMPLEMENTATION
@@ -510,6 +513,7 @@ XDLModule XDL_init() {
     glXMakeCurrentSrc =  (PFN_glXMakeCurrent)dlsym(module[1], "glXMakeCurrent");
     glXSwapBuffersSrc =  (PFN_glXSwapBuffers)dlsym(module[1], "glXSwapBuffers");
     glXSwapIntervalEXTSrc =  (PFN_glXSwapIntervalEXT)dlsym(module[1], "glXSwapIntervalEXT"); 
+    glXGetProcAddressSrc = (PFN_glXGetProcAddress)dlsym(module[1], "glXGetProcAddress"); 
     #endif
 
     /* send the module to the user */
