@@ -163,6 +163,9 @@ typedef Window (*PFN_XDefaultRootWindow)(Display*);
 typedef int (*PFN_XQueryKeymap)(Display*, char[32]); 
 typedef KeyCode (*PFN_XKeysymToKeycode)(Display*, KeySym);
 
+
+
+
 #ifndef XDL_NO_GLX
 typedef XVisualInfo* (*PFN_glXChooseVisual)(Display*, int, int*);
 typedef GLXContext (*PFN_glXCreateContext)(Display*, XVisualInfo*, GLXContext, Bool);
@@ -170,6 +173,10 @@ typedef Bool (*PFN_glXMakeCurrent)(Display*, GLXDrawable, GLXContext);
 typedef void (*PFN_glXSwapBuffers)(Display*, GLXDrawable);
 typedef PFNGLXSWAPINTERVALEXTPROC PFN_glXSwapIntervalEXT;
 typedef void* (*PFN_glXGetProcAddress)(const GLubyte *procname);
+typedef PFNGLXGETVISUALFROMFBCONFIGPROC PFN_glXGetVisualFromFBConfig;
+typedef PFNGLXGETFBCONFIGATTRIBPROC PFN_glXGetFBConfigAttrib;
+typedef __GLXextFuncPtr (*PFN_glXGetProcAddressARB)(const GLubyte *);
+typedef PFNGLXCHOOSEFBCONFIGPROC PFN_glXChooseFBConfig;
 #endif
 
 /* Src vars for reciving the functions */
@@ -277,6 +284,10 @@ PFN_glXMakeCurrent glXMakeCurrentSrc;
 PFN_glXSwapBuffers glXSwapBuffersSrc;
 PFN_glXSwapIntervalEXT glXSwapIntervalEXTSrc; 
 PFN_glXGetProcAddress glXGetProcAddressSrc;
+PFN_glXGetVisualFromFBConfig glXGetVisualFromFBConfigSrc;
+PFN_glXGetFBConfigAttrib glXGetFBConfigAttribSrc;
+PFN_glXGetProcAddressARB glXGetProcAddressARBSrc;
+PFN_glXChooseFBConfig glXChooseFBConfigSrc;
 #endif
 
 /* Function to source defines */
@@ -383,6 +394,10 @@ PFN_glXGetProcAddress glXGetProcAddressSrc;
 #define glXMakeCurrent glXMakeCurrentSrc
 #define glXSwapBuffers glXSwapBuffersSrc
 #define glXGetProcAddress glXGetProcAddressSrc
+#define glXGetVisualFromFBConfig glXGetVisualFromFBConfigSrc
+#define glXGetFBConfigAttrib glXGetFBConfigAttribSrc
+#define glXGetProcAddressARB glXGetProcAddressARBSrc
+#define glXChooseFBConfig glXChooseFBConfigSrc
 #endif
 
 #ifdef XDL_IMPLEMENTATION
@@ -514,6 +529,10 @@ XDLModule XDL_init() {
     glXSwapBuffersSrc =  (PFN_glXSwapBuffers)dlsym(module[1], "glXSwapBuffers");
     glXSwapIntervalEXTSrc =  (PFN_glXSwapIntervalEXT)dlsym(module[1], "glXSwapIntervalEXT"); 
     glXGetProcAddressSrc = (PFN_glXGetProcAddress)dlsym(module[1], "glXGetProcAddress"); 
+    glXGetVisualFromFBConfigSrc = (PFN_glXGetVisualFromFBConfig)dlsym(module[1],"glXGetVisualFromFBConfig");
+    glXGetFBConfigAttribSrc == (PFN_glXGetFBConfigAttrib)dlsym(module[1],"glXGetFBConfigAttrib");
+    glXGetProcAddressARBSrc = (PFN_glXGetProcAddressARB)dlsym(module[1],"glXGetProcAddressARB");
+    glXChooseFBConfigSrc = (PFN_glXChooseFBConfig)dlsym(module[1],"glXChooseFBConfig");
     #endif
 
     /* send the module to the user */
