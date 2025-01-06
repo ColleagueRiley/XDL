@@ -14,28 +14,19 @@ First, define XDL_IMPLEMENTATION and include the library
 Next, use XDL_init to load the X11 module 
 
 ```c
-XDLModule x11Module = XDL_init();
+XDL_init();
 ```
 
-When you're done, make sure to close the module, this frees all the allocated data and stored functions\
-This is not required in c++ because the data should automatically deallocate. (unless you have XDL_NO_DEALLOCATE enabled)
+When you're done, make sure to close the module, this frees all the allocated data and stored functions
 
 ```c
-XDL_close(x11Module);
+XDL_close();
 ```
 
 You can also define XDL_NO_GLX before including XDL if you don't want to include the GLX module 
 
 ```c
 #define XDL_NO_GLX
-#define XDL_IMPLEMENTATION
-#include "XDL.h"
-```
-
-XDL_NO_DEALLOCATE can be defined to turn of automatic deallocation for c++
-
-```cpp
-#define XDL_NO_DEALLOCATE
 #define XDL_IMPLEMENTATION
 #include "XDL.h"
 ```
