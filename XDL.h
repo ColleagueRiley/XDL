@@ -179,6 +179,7 @@ typedef XrmDatabase (*PFN_XrmGetStringDatabase)(const char *data);
 typedef Bool (*PFN_XrmGetResource)(XrmDatabase database, const char *resource_name, const char *resource_class, char **type, XrmValue *value);
 typedef void (*PFN_XrmDestroyDatabase)(XrmDatabase database);
 typedef char *(*PFN_XDisplayName)(const char *string);
+typedef Bool (*PFN_XkbGetState)(Display*, unsigned int, XkbStatePtr);
 
 #ifndef XDL_NO_XRANDR
 #include <X11/extensions/Xrandr.h>
@@ -196,6 +197,7 @@ typedef void (*PFN_XRRFreeScreenResources)(XRRScreenResources *resources);
 typedef XVisualInfo* (*PFN_glXChooseVisual)(Display*, int, int*);
 typedef GLXContext (*PFN_glXCreateContext)(Display*, XVisualInfo*, GLXContext, Bool);
 typedef Bool (*PFN_glXMakeCurrent)(Display*, GLXDrawable, GLXContext);
+typedef GLXContext (*PFN_glXGetCurrentContext)(void);
 typedef void (*PFN_glXSwapBuffers)(Display*, GLXDrawable);
 typedef PFNGLXSWAPINTERVALEXTPROC PFN_glXSwapIntervalEXT;
 typedef void* (*PFN_glXGetProcAddress)(const GLubyte *procname);
@@ -203,6 +205,7 @@ typedef PFNGLXGETVISUALFROMFBCONFIGPROC PFN_glXGetVisualFromFBConfig;
 typedef PFNGLXGETFBCONFIGATTRIBPROC PFN_glXGetFBConfigAttrib;
 typedef __GLXextFuncPtr (*PFN_glXGetProcAddressARB)(const GLubyte *);
 typedef PFNGLXCHOOSEFBCONFIGPROC PFN_glXChooseFBConfig;
+typedef void (*PFN_glXDestroyContext)(Display *dpy, GLXContext ctx);
 #endif
 
 /* Src vars for reciving the functions */
@@ -309,6 +312,7 @@ PFN_XrmGetStringDatabase XrmGetStringDatabaseSrc;
 PFN_XrmGetResource XrmGetResourceSrc;
 PFN_XrmDestroyDatabase XrmDestroyDatabaseSrc;
 PFN_XDisplayName XDisplayNameSrc;
+PFN_XkbGetState XkbGetStateSrc;
 #ifndef XDL_NO_XRANDR
 PFN_XRRGetScreenResourcesCurrent XRRGetScreenResourcesCurrentSrc;
 PFN_XRRGetCrtcInfo XRRGetCrtcInfoSrc;
@@ -322,6 +326,7 @@ PFN_XRRFreeScreenResources XRRFreeScreenResourcesSrc;
 PFN_glXChooseVisual glXChooseVisualSrc;
 PFN_glXCreateContext glXCreateContextSrc;
 PFN_glXMakeCurrent glXMakeCurrentSrc;
+PFN_glXGetCurrentContext glXGetCurrentContextSrc;
 PFN_glXSwapBuffers glXSwapBuffersSrc;
 PFN_glXSwapIntervalEXT glXSwapIntervalEXTSrc; 
 PFN_glXGetProcAddress glXGetProcAddressSrc;
@@ -329,6 +334,7 @@ PFN_glXGetVisualFromFBConfig glXGetVisualFromFBConfigSrc;
 PFN_glXGetFBConfigAttrib glXGetFBConfigAttribSrc;
 PFN_glXGetProcAddressARB glXGetProcAddressARBSrc;
 PFN_glXChooseFBConfig glXChooseFBConfigSrc;
+PFN_glXDestroyContext glXDestroyContextSrc;
 #endif
 
 /* Function to source defines */
@@ -354,6 +360,7 @@ PFN_glXChooseFBConfig glXChooseFBConfigSrc;
 #define XDestroyRegion XDestroyRegionSrc
 #define XDestroyWindow XDestroyWindowSrc
 #define XDisplayKeycodes XDisplayKeycodesSrc
+#define XkbGetState XkbGetStateSrc
 #define XEventsQueued XEventsQueuedSrc
 #define XFilterEvent XFilterEventSrc
 #define XFindContext XFindContextSrc
@@ -449,12 +456,14 @@ PFN_glXChooseFBConfig glXChooseFBConfigSrc;
     #define glXChooseVisual glXChooseVisualSrc
     #define glXCreateContext glXCreateContextSrc
     #define glXMakeCurrent glXMakeCurrentSrc
-    #define glXSwapBuffers glXSwapBuffersSrc
+    #define glXGetCurrentContext glXGetCurrentContextSrc
+	#define glXSwapBuffers glXSwapBuffersSrc
     #define glXGetProcAddress glXGetProcAddressSrc
     #define glXGetVisualFromFBConfig glXGetVisualFromFBConfigSrc
     #define glXGetFBConfigAttrib glXGetFBConfigAttribSrc
     #define glXGetProcAddressARB glXGetProcAddressARBSrc
     #define glXChooseFBConfig glXChooseFBConfigSrc
+    #define glXDestroyContext glXDestroyContextSrc
     #define glXSwapIntervalEXT glXSwapIntervalEXTSrc
 #endif
 
@@ -593,6 +602,7 @@ void XDL_init(void) {
     XDL_PROC_DEF(0, XrmGetResource);
     XDL_PROC_DEF(0, XrmDestroyDatabase);
     XDL_PROC_DEF(0, XDisplayName);
+    XDL_PROC_DEF(0, XkbGetState);
     #ifndef XDL_NO_XRANDR
         XDL_PROC_DEF(2, XRRGetScreenResourcesCurrent);
         XDL_PROC_DEF(2, XRRGetCrtcInfo);
@@ -607,13 +617,15 @@ void XDL_init(void) {
         XDL_PROC_DEF(1, glXChooseVisual);
         XDL_PROC_DEF(1, glXCreateContext);
         XDL_PROC_DEF(1, glXMakeCurrent);
-        XDL_PROC_DEF(1, glXSwapBuffers);
+        XDL_PROC_DEF(1, glXGetCurrentContext);
+		XDL_PROC_DEF(1, glXSwapBuffers);
         XDL_PROC_DEF(1, glXSwapIntervalEXT); 
         XDL_PROC_DEF(1, glXGetProcAddress); 
         XDL_PROC_DEF(1, glXGetVisualFromFBConfig);
         XDL_PROC_DEF(1, glXGetFBConfigAttrib);
         XDL_PROC_DEF(1, glXGetProcAddressARB);
         XDL_PROC_DEF(1, glXChooseFBConfig);
+        XDL_PROC_DEF(1, glXDestroyContext);
     #endif
 }
 
