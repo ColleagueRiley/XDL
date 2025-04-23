@@ -179,6 +179,14 @@ typedef XrmDatabase (*PFN_XrmGetStringDatabase)(const char *data);
 typedef Bool (*PFN_XrmGetResource)(XrmDatabase database, const char *resource_name, const char *resource_class, char **type, XrmValue *value);
 typedef void (*PFN_XrmDestroyDatabase)(XrmDatabase database);
 typedef char *(*PFN_XDisplayName)(const char *string);
+typedef Bool (*PFN_XkbGetState)(Display*, unsigned int, XkbStatePtr);
+typedef int (*PFN_XWidthOfScreen)(Screen* screen);
+typedef int (*PFN_XHeightOfScreen)(Screen* screen);
+typedef GC (*PFN_XCreateGC)(Display* display, Drawable d, unsigned long valuemask, XGCValues* values);
+typedef int (*PFN_XFreeGC)(Display *display, GC gc);
+typedef XImage* (*PFN_XCreateImage)(Display*, Visual*, unsigned int, int, int, char*, unsigned int, unsigned int, int, int);
+typedef Pixmap (*PFN_XCreatePixmap)(Display* display, Drawable d, unsigned int width, unsigned int height, unsigned int depth);
+typedef int (*PFN_XPutImage)(Display *display, Drawable d, GC gc, XImage *image, int src_x, int src_y, int dest_x, int dest_y, unsigned int width, unsigned int height);
 
 #ifndef XDL_NO_XRANDR
 #include <X11/extensions/Xrandr.h>
@@ -188,6 +196,9 @@ typedef XRROutputInfo *(*PFN_XRRGetOutputInfo)(Display *display, XRRScreenResour
 typedef void (*PFN_XRRFreeCrtcInfo)(XRRCrtcInfo *crtc_info);
 typedef XRRScreenResources *(*PFN_XRRGetScreenResources)(Display *display, Window window);
 typedef void (*PFN_XRRFreeScreenResources)(XRRScreenResources *resources);
+typedef void (*PFN_XRRFreeOutputInfo)(XRROutputInfo*);
+typedef Status (*PFN_XRRSetScreenConfig) (Display *dpy, XRRScreenConfiguration *config, Drawable draw, int size_index, Rotation rotation, Time timestamp);
+typedef Status (*PFN_XRRSetCrtcConfig)(Display*, XRRScreenResources*, RRCrtc, Time, int, int, RRMode, Rotation, RROutput*, int);
 #endif
 
 #ifndef XDL_NO_GLX
@@ -196,6 +207,7 @@ typedef void (*PFN_XRRFreeScreenResources)(XRRScreenResources *resources);
 typedef XVisualInfo* (*PFN_glXChooseVisual)(Display*, int, int*);
 typedef GLXContext (*PFN_glXCreateContext)(Display*, XVisualInfo*, GLXContext, Bool);
 typedef Bool (*PFN_glXMakeCurrent)(Display*, GLXDrawable, GLXContext);
+typedef GLXContext (*PFN_glXGetCurrentContext)(void);
 typedef void (*PFN_glXSwapBuffers)(Display*, GLXDrawable);
 typedef PFNGLXSWAPINTERVALEXTPROC PFN_glXSwapIntervalEXT;
 typedef void* (*PFN_glXGetProcAddress)(const GLubyte *procname);
@@ -203,6 +215,7 @@ typedef PFNGLXGETVISUALFROMFBCONFIGPROC PFN_glXGetVisualFromFBConfig;
 typedef PFNGLXGETFBCONFIGATTRIBPROC PFN_glXGetFBConfigAttrib;
 typedef __GLXextFuncPtr (*PFN_glXGetProcAddressARB)(const GLubyte *);
 typedef PFNGLXCHOOSEFBCONFIGPROC PFN_glXChooseFBConfig;
+typedef void (*PFN_glXDestroyContext)(Display *dpy, GLXContext ctx);
 #endif
 
 /* Src vars for reciving the functions */
@@ -309,6 +322,14 @@ PFN_XrmGetStringDatabase XrmGetStringDatabaseSrc;
 PFN_XrmGetResource XrmGetResourceSrc;
 PFN_XrmDestroyDatabase XrmDestroyDatabaseSrc;
 PFN_XDisplayName XDisplayNameSrc;
+PFN_XkbGetState XkbGetStateSrc;
+PFN_XWidthOfScreen XWidthOfScreenSrc;
+PFN_XWidthOfScreen XHeightOfScreenSrc;
+PFN_XCreateGC XCreateGCSrc;
+PFN_XFreeGC XFreeGCSrc;
+PFN_XCreateImage XCreateImageSrc;
+PFN_XCreatePixmap XCreatePixmapSrc;
+PFN_XPutImage XPutImageSrc;
 #ifndef XDL_NO_XRANDR
 PFN_XRRGetScreenResourcesCurrent XRRGetScreenResourcesCurrentSrc;
 PFN_XRRGetCrtcInfo XRRGetCrtcInfoSrc;
@@ -316,12 +337,16 @@ PFN_XRRGetOutputInfo XRRGetOutputInfoSrc;
 PFN_XRRFreeCrtcInfo XRRFreeCrtcInfoSrc;
 PFN_XRRGetScreenResources XRRGetScreenResourcesSrc;
 PFN_XRRFreeScreenResources XRRFreeScreenResourcesSrc;
+PFN_XRRFreeOutputInfo XRRFreeOutputInfoSrc;
+PFN_XRRSetScreenConfig XRRSetScreenConfigSrc;
+PFN_XRRSetCrtcConfig XRRSetCrtcConfigSrc;
 #endif
 
 #ifndef XDL_NO_GLX
 PFN_glXChooseVisual glXChooseVisualSrc;
 PFN_glXCreateContext glXCreateContextSrc;
 PFN_glXMakeCurrent glXMakeCurrentSrc;
+PFN_glXGetCurrentContext glXGetCurrentContextSrc;
 PFN_glXSwapBuffers glXSwapBuffersSrc;
 PFN_glXSwapIntervalEXT glXSwapIntervalEXTSrc; 
 PFN_glXGetProcAddress glXGetProcAddressSrc;
@@ -329,6 +354,7 @@ PFN_glXGetVisualFromFBConfig glXGetVisualFromFBConfigSrc;
 PFN_glXGetFBConfigAttrib glXGetFBConfigAttribSrc;
 PFN_glXGetProcAddressARB glXGetProcAddressARBSrc;
 PFN_glXChooseFBConfig glXChooseFBConfigSrc;
+PFN_glXDestroyContext glXDestroyContextSrc;
 #endif
 
 /* Function to source defines */
@@ -354,6 +380,12 @@ PFN_glXChooseFBConfig glXChooseFBConfigSrc;
 #define XDestroyRegion XDestroyRegionSrc
 #define XDestroyWindow XDestroyWindowSrc
 #define XDisplayKeycodes XDisplayKeycodesSrc
+#define XkbGetState XkbGetStateSrc
+#define XWidthOfScreen XWidthOfScreenSrc
+#define XHeightOfScreen XHeightOfScreenSrc
+#define XCreateGC XCreateGCSrc
+#define XFreeGC XFreeGCSrc
+#define XCreateImage  XCreateImageSrc
 #define XEventsQueued XEventsQueuedSrc
 #define XFilterEvent XFilterEventSrc
 #define XFindContext XFindContextSrc
@@ -435,6 +467,9 @@ PFN_glXChooseFBConfig glXChooseFBConfigSrc;
 #define XrmGetResource XrmGetResourceSrc
 #define XrmDestroyDatabase XrmDestroyDatabaseSrc
 #define XDisplayName XDisplayNameSrc
+#define XCreateImage XCreateImageSrc
+#define XCreatePixmap XCreatePixmapSrc
+#define XPutImage XPutImageSrc
 
 #ifndef XDL_NO_XRANDR
     #define XRRGetScreenResourcesCurrent XRRGetScreenResourcesCurrentSrc
@@ -443,18 +478,23 @@ PFN_glXChooseFBConfig glXChooseFBConfigSrc;
     #define XRRFreeCrtcInfo XRRFreeCrtcInfoSrc
     #define XRRGetScreenResources XRRGetScreenResourcesSrc
     #define XRRFreeScreenResources XRRFreeScreenResourcesSrc
+    #define XRRFreeOutputInfo XRRFreeOutputInfoSrc
+    #define XRRSetScreenConfig XRRSetScreenConfigSrc
+    #define XRRSetCrtcConfig XRRSetCrtcConfigSrc
 #endif
 
 #ifndef XDL_NO_GLX
     #define glXChooseVisual glXChooseVisualSrc
     #define glXCreateContext glXCreateContextSrc
     #define glXMakeCurrent glXMakeCurrentSrc
-    #define glXSwapBuffers glXSwapBuffersSrc
+    #define glXGetCurrentContext glXGetCurrentContextSrc
+	#define glXSwapBuffers glXSwapBuffersSrc
     #define glXGetProcAddress glXGetProcAddressSrc
     #define glXGetVisualFromFBConfig glXGetVisualFromFBConfigSrc
     #define glXGetFBConfigAttrib glXGetFBConfigAttribSrc
     #define glXGetProcAddressARB glXGetProcAddressARBSrc
     #define glXChooseFBConfig glXChooseFBConfigSrc
+    #define glXDestroyContext glXDestroyContextSrc
     #define glXSwapIntervalEXT glXSwapIntervalEXTSrc
 #endif
 
@@ -593,6 +633,15 @@ void XDL_init(void) {
     XDL_PROC_DEF(0, XrmGetResource);
     XDL_PROC_DEF(0, XrmDestroyDatabase);
     XDL_PROC_DEF(0, XDisplayName);
+    XDL_PROC_DEF(0, XkbGetState);
+    XDL_PROC_DEF(0, XWidthOfScreen);
+    XDL_PROC_DEF(0, XHeightOfScreen);
+    XDL_PROC_DEF(0, XCreateGC);
+    XDL_PROC_DEF(0, XFreeGC);
+    XDL_PROC_DEF(0, XCreateImage);
+    XDL_PROC_DEF(0, XCreatePixmap);
+    XDL_PROC_DEF(0, XPutImage);
+
     #ifndef XDL_NO_XRANDR
         XDL_PROC_DEF(2, XRRGetScreenResourcesCurrent);
         XDL_PROC_DEF(2, XRRGetCrtcInfo);
@@ -600,20 +649,24 @@ void XDL_init(void) {
         XDL_PROC_DEF(2, XRRFreeCrtcInfo);
         XDL_PROC_DEF(2, XRRGetScreenResources);
         XDL_PROC_DEF(2, XRRFreeScreenResources);
+        XDL_PROC_DEF(2, XRRFreeOutputInfo);
+        XDL_PROC_DEF(2, XRRSetScreenConfig);
+        XDL_PROC_DEF(2, XRRSetCrtcConfig);
     #endif
-
 
     #ifndef XDL_NO_GLX
         XDL_PROC_DEF(1, glXChooseVisual);
         XDL_PROC_DEF(1, glXCreateContext);
         XDL_PROC_DEF(1, glXMakeCurrent);
-        XDL_PROC_DEF(1, glXSwapBuffers);
+        XDL_PROC_DEF(1, glXGetCurrentContext);
+		XDL_PROC_DEF(1, glXSwapBuffers);
         XDL_PROC_DEF(1, glXSwapIntervalEXT); 
         XDL_PROC_DEF(1, glXGetProcAddress); 
         XDL_PROC_DEF(1, glXGetVisualFromFBConfig);
         XDL_PROC_DEF(1, glXGetFBConfigAttrib);
         XDL_PROC_DEF(1, glXGetProcAddressARB);
         XDL_PROC_DEF(1, glXChooseFBConfig);
+        XDL_PROC_DEF(1, glXDestroyContext);
     #endif
 }
 
